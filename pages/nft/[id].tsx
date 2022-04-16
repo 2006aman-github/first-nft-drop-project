@@ -12,8 +12,8 @@ interface Props {
 
 const NFTDropPage = ({ collection }: Props) => {
   // Authentication stuff...
-  console.log(collection)
   const connectWithMetamask = useMetamask()
+
   const disconnect = useDisconnect()
   const address = useAddress()
 
