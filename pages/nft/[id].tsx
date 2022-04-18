@@ -12,7 +12,8 @@ import Link from 'next/link'
 import { Icon } from '@iconify/react'
 import { BigNumber } from 'ethers'
 import toast, { Toaster } from 'react-hot-toast'
-import ConfettiGenerator from 'confetti-js'
+// import ConfettiGenerator from 'confetti-js'
+const ConfettiGenerator = require('confetti-js')
 import { confettiSettings } from '../../config/confettiEffect'
 
 interface Props {
@@ -32,7 +33,7 @@ const NFTDropPage = ({ collection }: Props) => {
   const [loading, setLoading] = useState<Boolean>(true)
   const [priceInETH, setpriceInETH] = useState<string>()
   const [minting, setMinting] = useState<boolean>(false)
-  const mainElRef = React.useRef<HTMLDivElement>()
+
   const [minted, setMinted] = useState<boolean>(false)
 
   useEffect(() => {
@@ -130,7 +131,6 @@ const NFTDropPage = ({ collection }: Props) => {
       {minted && (
         <canvas
           className="absolute top-0 left-0 h-full w-screen"
-          ref={mainElRef}
           id="main-canvas"
         ></canvas>
       )}
