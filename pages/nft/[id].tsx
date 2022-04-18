@@ -12,6 +12,8 @@ import Link from 'next/link'
 import { Icon } from '@iconify/react'
 import { BigNumber } from 'ethers'
 import toast, { Toaster } from 'react-hot-toast'
+import ConfettiGenerator from 'confetti-js'
+import { confettiSettings } from '../../config/confettiEffect'
 
 interface Props {
   collection: Collection
@@ -30,6 +32,8 @@ const NFTDropPage = ({ collection }: Props) => {
   const [loading, setLoading] = useState<Boolean>(true)
   const [priceInETH, setpriceInETH] = useState<string>()
   const [minting, setMinting] = useState<boolean>(false)
+  const mainElRef = React.useRef<HTMLDivElement>()
+  const [minted, setMinted] = useState<boolean>(false)
 
   useEffect(() => {
     if (!NFTDrop || !NFTDrop.totalSupply) {
@@ -91,6 +95,13 @@ const NFTDropPage = ({ collection }: Props) => {
             padding: '1rem',
           },
         })
+        setMinted(true)
+        const confetti = new ConfettiGenerator(confettiSettings)
+        confetti.render()
+        setTimeout(() => {
+          confetti.clear()
+          setMinted(false)
+        }, 10000)
         console.log(claimedToken)
         console.log(receipt)
         console.log(claimedNFT)
@@ -115,7 +126,15 @@ const NFTDropPage = ({ collection }: Props) => {
   }
 
   return (
-    <div className="flex h-screen flex-col lg:grid lg:grid-cols-10">
+    <div className="relative flex h-screen flex-col lg:grid lg:grid-cols-10">
+      {minted && (
+        <canvas
+          className="absolute top-0 left-0 h-full w-screen"
+          ref={mainElRef}
+          id="main-canvas"
+        ></canvas>
+      )}
+
       <Toaster position="bottom-left" reverseOrder={false} />
       {/* left  */}
       <div className="bg-gradient-to-br from-cyan-600 to-black lg:col-span-4">

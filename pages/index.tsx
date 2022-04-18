@@ -31,14 +31,6 @@ const Home = ({ collections }: Props) => {
       <main className="z-0 min-h-screen  bg-black/90">
         {/* view-1  */}
         <div className="flex h-screen flex-col">
-          {/* floating bubbles of traits of nft-collection  */}
-          {/* <img src={'/assets/svg/bubble-1.svg'} ref={ref1 as React.LegacyRef<HTMLImageElement>} className='w-20 -z-10 hidden animate-wiggle  absolute top-1/2 left-1/2' alt="" />
-          <img src={'/assets/svg/bubble-2.svg'} className='w-20 -z-10 bg-black/10 animate-wiggle  absolute top-1/4 right-1/3 -z-2' alt="" />  
-            <img src={'/assets/svg/bubble-3.svg'} className='w-20 -z-10 animate-wiggle bg-black/10  absolute top-1/2 left-2/3 -z-2' alt="" /> 
-               <img src={'/assets/svg/bubble-4.svg'} className='w-20 -z-10 animate-wiggle bg-black/10  absolute top-1/6 left-1/2 -z-2' alt="" />  
-                <img src={'/assets/svg/bubble-5.svg'} className='w-20 -z-10 bg-black/10 animate-wiggle  absolute top-1/4 left-1/8 -z-2' alt="" /> 
-                   <img src={'/assets/svg/bubble-6.svg'} className='w-20 -z-10 bg-black/10 animate-wiggle  absolute top-1/5 right-5/3 -z-2' alt="" /> */}
-          {/* header  */}
           <header className="flex-.1  flex justify-end  p-5 px-5 align-baseline">
             {address ? (
               <div className="flex items-center justify-center space-x-2 rounded-full border-2 border-slate-700 px-5 py-2 text-white">
@@ -54,7 +46,8 @@ const Home = ({ collections }: Props) => {
             ) : (
               <button
                 onClick={() => (address ? disconnect() : connectWithMetamask())}
-                className="text-bold flex items-center justify-center space-x-2 rounded-full bg-indigo-600 px-5 py-2 text-center text-white transition-all duration-100 hover:outline hover:outline-4 hover:outline-indigo-500"
+                style={{ WebkitTapHighlightColor: 'transparent' }}
+                className="text-bold flex items-center justify-center space-x-2 rounded-full bg-blue-500 px-5 py-2 text-center text-white transition-all duration-100 hover:outline hover:outline-4 hover:outline-blue-500 active:bg-blue-900"
               >
                 <span>Connect to a wallet</span>
                 <Icon icon="clarity:connect-solid" rotate={1} />
@@ -63,7 +56,7 @@ const Home = ({ collections }: Props) => {
           </header>
           {/* body  */}
           <div className="w-100 flex flex-auto flex-col items-center justify-center space-y-7  font-bold">
-            <h1 className=" w-50 text-center text-3xl  text-indigo-600 sm:text-5xl md:text-6xl lg:text-7xl">
+            <h1 className=" w-50 text-blue-00 text-center text-3xl text-blue-500 sm:text-5xl md:text-6xl lg:text-7xl">
               Welcome to, Aman-Tech
             </h1>
             <h3 className="w-100 mb-5 text-2xl font-bold text-white md:text-3xl lg:text-5xl">
@@ -76,7 +69,7 @@ const Home = ({ collections }: Props) => {
             {address ? (
               <button
                 onClick={() => disconnect()}
-                className="text-bold mt-3 flex items-center justify-center space-x-2 rounded-full bg-slate-200 px-5 py-2 text-center text-black transition-all duration-100 hover:outline hover:outline-4 hover:outline-indigo-500"
+                className="text-bold mt-3 flex items-center justify-center space-x-2 rounded-full bg-slate-200 px-5 py-2 text-center text-black transition-all duration-100  hover:outline hover:outline-4 hover:outline-blue-500 active:bg-slate-400"
               >
                 <span>Disconnect wallet</span>
                 <Icon icon="codicon:debug-disconnect" width="16" height="16" />
@@ -84,7 +77,7 @@ const Home = ({ collections }: Props) => {
             ) : (
               <button
                 onClick={() => (address ? disconnect() : connectWithMetamask())}
-                className="text-bold mt-3 flex items-center justify-center space-x-2 rounded-full bg-indigo-600 px-5 py-2 text-center text-white transition-all duration-100 hover:outline hover:outline-4 hover:outline-indigo-500"
+                className="text-bold mt-3 flex items-center justify-center space-x-2 rounded-full bg-blue-500 px-5 py-2 text-center text-white transition-all duration-100 hover:outline hover:outline-4 hover:outline-blue-900 active:bg-blue-900"
               >
                 <span>Connect to a wallet</span>
                 <Icon icon="clarity:connect-solid" rotate={1} />
