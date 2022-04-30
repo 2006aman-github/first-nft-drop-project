@@ -7,6 +7,8 @@ import React, { useEffect } from 'react'
 import { sanityClient, urlFor } from '../sanity'
 import { Collection } from '../typings'
 import { Icon } from '@iconify/react'
+import ConnectWalletButton from '../components/ConnectWalletButton'
+import AddressButton from '../components/AddressButton'
 
 interface Props {
   collections: Collection[]
@@ -32,27 +34,7 @@ const Home = ({ collections }: Props) => {
         {/* view-1  */}
         <div className="flex h-screen flex-col">
           <header className="flex-.1  flex justify-end  p-5 px-5 align-baseline">
-            {address ? (
-              <div className="flex items-center justify-center space-x-2 rounded-full border-2 border-slate-700 px-5 py-2 text-white">
-                <span>
-                  <Icon icon="bx:wallet-alt" />
-                </span>
-                <span className="text-white">
-                  {address.substring(0, 5) +
-                    '...' +
-                    address.substring(address.length - 5)}
-                </span>
-              </div>
-            ) : (
-              <button
-                onClick={() => (address ? disconnect() : connectWithMetamask())}
-                style={{ WebkitTapHighlightColor: 'transparent' }}
-                className="text-bold flex items-center justify-center space-x-2 rounded-full bg-blue-500 px-5 py-2 text-center text-white transition-all duration-100 hover:outline hover:outline-4 hover:outline-blue-500 active:bg-blue-900"
-              >
-                <span>Connect to a wallet</span>
-                <Icon icon="clarity:connect-solid" rotate={1} />
-              </button>
-            )}
+            {address ? <AddressButton /> : <ConnectWalletButton />}
           </header>
           {/* body  */}
           <div className="w-100 flex flex-auto flex-col items-center justify-center space-y-7  font-bold">
@@ -67,26 +49,28 @@ const Home = ({ collections }: Props) => {
               cheapest NFT collections on the internet
             </p>
             {address ? (
-              <button
-                onClick={() => disconnect()}
-                className="text-bold mt-3 flex items-center justify-center space-x-2 rounded-full bg-slate-200 px-5 py-2 text-center text-black transition-all duration-100  hover:outline hover:outline-4 hover:outline-blue-500 active:bg-slate-400"
-              >
-                <span>Disconnect wallet</span>
-                <Icon icon="codicon:debug-disconnect" width="16" height="16" />
-              </button>
+              // <button
+              //   onClick={() => disconnect()}
+              //   className="text-bold mt-3 flex items-center justify-center space-x-2 rounded-full bg-slate-200 px-5 py-2 text-center text-black transition-all duration-100  hover:outline hover:outline-4 hover:outline-blue-500 active:bg-slate-400"
+              // >
+
+              // </button>
+              <Link href={`/dashboard/[address]`} as={'/dashboard/' + address}>
+                <button className="text-bold mt-3 flex items-center justify-center space-x-2 rounded-full bg-blue-500 px-5 py-2 text-center text-white transition-all duration-100 hover:outline hover:outline-4 hover:outline-blue-900 active:bg-blue-900">
+                  <span>Dashboard</span>
+                  <Icon icon="ic:baseline-dashboard" />
+                </button>
+              </Link>
             ) : (
-              <button
-                onClick={() => (address ? disconnect() : connectWithMetamask())}
-                className="text-bold mt-3 flex items-center justify-center space-x-2 rounded-full bg-blue-500 px-5 py-2 text-center text-white transition-all duration-100 hover:outline hover:outline-4 hover:outline-blue-900 active:bg-blue-900"
-              >
-                <span>Connect to a wallet</span>
-                <Icon icon="clarity:connect-solid" rotate={1} />
-              </button>
+              <ConnectWalletButton />
             )}
           </div>
         </div>
         {/* view-2  */}
-        <div className="m-auto flex h-screen flex-col items-center  space-y-5 text-center">
+        <div
+          id="collections"
+          className="m-auto flex h-screen flex-col items-center  space-y-5 text-center"
+        >
           <h1 className="p-5 text-center text-4xl font-bold text-white lg:text-7xl">
             There you go!
           </h1>
