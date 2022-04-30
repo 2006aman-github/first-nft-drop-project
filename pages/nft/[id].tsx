@@ -103,10 +103,7 @@ const NFTDropPage = ({ collection }: Props) => {
         // const ConfettiGenerator = window.ConfettiGenerator
         // const confetti = new ConfettiGenerator(confettiSettings)
         // confetti.render()
-        setTimeout(() => {
-          // confetti.clear()
-          setMinted(false)
-        }, 10000)
+
         // console.log(claimedToken?.toString())
 
         claimedNFT
