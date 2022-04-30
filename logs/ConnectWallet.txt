@@ -1,0 +1,3 @@
+1.0.0:
+>> Added coinBase and WalletConnect wallet connection
+>> Added a dropdowwn to choose which wallet to connect to
