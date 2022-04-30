@@ -7,34 +7,34 @@ import {
 } from '@thirdweb-dev/react'
 import { GetServerSideProps } from 'next'
 import { sanityClient, urlFor } from '../../sanity'
-import { Collection } from '../../typings'
+import { claimedNFTs, Collection } from '../../typings'
 import Link from 'next/link'
 import { Icon } from '@iconify/react'
 import { BigNumber } from 'ethers'
 import toast, { Toaster } from 'react-hot-toast'
-// import ConfettiGenerator from 'confetti-js'
-const ConfettiGenerator = require('confetti-js')
+import RevealCard from '../../components/RevealCard'
+
 import { confettiSettings } from '../../config/confettiEffect'
+import Backdrop from '@mui/material/Backdrop'
+import ConnectWalletButton from '../../components/ConnectWalletButton'
+import AddressButton from '../../components/AddressButton'
+import { NFTMetadataOwner } from '@thirdweb-dev/sdk'
 
 interface Props {
   collection: Collection
   id: string
 }
-
 const NFTDropPage = ({ collection }: Props) => {
   // Authentication stuff...
-  const connectWithMetamask = useMetamask()
-  const disconnect = useDisconnect()
   const address = useAddress()
   const NFTDrop = useNFTDrop(collection.address)
-
   const [claimedSupply, setClaimedSupply] = useState<Number>(0)
   const [totalSupply, setTotalSupply] = useState<BigNumber>()
   const [loading, setLoading] = useState<Boolean>(true)
-  const [priceInETH, setpriceInETH] = useState<string>()
+  const [priceInETH, setpriceInETH] = useState<string>('')
   const [minting, setMinting] = useState<boolean>(false)
-
   const [minted, setMinted] = useState<boolean>(false)
+  const [mintedNFT, setMintedNFT] = useState<Object>({})
 
   useEffect(() => {
     if (!NFTDrop || !NFTDrop.totalSupply) {
@@ -63,6 +63,9 @@ const NFTDropPage = ({ collection }: Props) => {
       setpriceInETH(claimConditions[0].currencyMetadata.displayValue)
     }
     fetchPrice()
+    // const ConfettiGenerator = window.ConfettiGenerator
+    // const confetti = new ConfettiGenerator(confettiSettings)
+    // confetti.render()
   }, [NFTDrop])
 
   const MintNFT = () => {
@@ -97,15 +100,30 @@ const NFTDropPage = ({ collection }: Props) => {
           },
         })
         setMinted(true)
-        const confetti = new ConfettiGenerator(confettiSettings)
-        confetti.render()
+        // const ConfettiGenerator = window.ConfettiGenerator
+        // const confetti = new ConfettiGenerator(confettiSettings)
+        // confetti.render()
         setTimeout(() => {
-          confetti.clear()
+          // confetti.clear()
           setMinted(false)
         }, 10000)
-        console.log(claimedToken)
-        console.log(receipt)
-        console.log(claimedNFT)
+        // console.log(claimedToken?.toString())
+
+        claimedNFT
+          .then((nft) => {
+            setMintedNFT(nft)
+          })
+          .catch((err) => {
+            toast.error(err.message, {
+              style: {
+                background: 'red',
+                color: 'white',
+                fontWeight: 'bolder',
+                fontSize: '1.2rem',
+                padding: '1rem',
+              },
+            })
+          })
       })
       .catch((err) => {
         console.log(err)
@@ -128,12 +146,12 @@ const NFTDropPage = ({ collection }: Props) => {
 
   return (
     <div className="relative flex h-screen flex-col lg:grid lg:grid-cols-10">
-      {minted && (
+      {/* {minted && (
         <canvas
-          className="absolute top-0 left-0 h-full w-screen"
+          className="absolute top-0 left-0 h-full w-full"
           id="main-canvas"
         ></canvas>
-      )}
+      )} */}
 
       <Toaster position="bottom-left" reverseOrder={false} />
       {/* left  */}
@@ -154,8 +172,29 @@ const NFTDropPage = ({ collection }: Props) => {
           </div>
         </div>
       </div>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={minted}
+        className="spce-y-5 flex flex-col"
+      >
+        <>
+          {Object.keys(mintedNFT).length > 0 && (
+            <>
+              <RevealCard
+                className="h-auto w-80"
+                collectionAddress={collection.address}
+                claimedNFT={mintedNFT as NFTMetadataOwner}
+                priceInETH={priceInETH}
+              />
+              <button className="rounded-xl bg-blue-500 px-5 py-2 text-sm hover:bg-blue-600">
+                Close
+              </button>
+            </>
+          )}
+        </>
+      </Backdrop>
       {/* right  */}
-      <div className="flex flex-1 flex-col p-12 lg:col-span-6">
+      <div className="flex flex-1 flex-col bg-black p-12 text-white lg:col-span-6">
         {/* header  */}
         <header className="flex-center flex items-center justify-between">
           <Link href="/">
@@ -167,27 +206,10 @@ const NFTDropPage = ({ collection }: Props) => {
               NFT Marketplace
             </h1>
           </Link>
-          <button
-            className="whitespace-nowrap rounded-full bg-blue-500 px-3 py-2 text-xs font-bold text-white lg:px-5 lg:py-3 lg:text-base"
-            onClick={() => (address ? disconnect() : connectWithMetamask())}
-          >
-            {address ? 'Sign Out' : 'Sign In'}
-          </button>
+          {address ? <AddressButton /> : <ConnectWalletButton />}
         </header>
-        <hr className="my-2 border" />
-        {address && (
-          <p className="flex flex-col text-center text-sm text-green-500">
-            <span>You're logged in with wallet</span>
-            <span className="flex items-center justify-center space-x-3">
-              <Icon icon="bx:wallet-alt" />
-              <p>
-                {address.substring(0, 5) +
-                  '...' +
-                  address.substring(address.length - 5)}
-              </p>
-            </span>
-          </p>
-        )}
+        <hr className="my-2 border border-transparent bg-green-500" />
+
         {/* content  */}
         <div className="mt-10 flex flex-1 flex-col items-center space-y-6 text-center lg:justify-center lg:space-y-0">
           <img
@@ -222,7 +244,7 @@ const NFTDropPage = ({ collection }: Props) => {
             Boolean(minting)
           }
           onClick={MintNFT}
-          className="mt-10 flex h-16 w-full items-center justify-center space-x-2 rounded-full bg-blue-500 font-bold text-white disabled:animate-pulse disabled:bg-gray-400"
+          className="mt-10 flex h-16 w-full items-center justify-center space-x-2 rounded-full bg-blue-500 font-bold text-white hover:bg-blue-600 disabled:animate-pulse disabled:bg-gray-400"
         >
           {loading ? (
             <>Loading</>
