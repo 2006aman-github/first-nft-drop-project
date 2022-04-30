@@ -61,7 +61,7 @@ function Dropdown({
           ? anchorEl
             ? ' visible  animate-popIn'
             : 'display-none animate-popOut opacity-0'
-          : 'display-none  opacity-0'
+          : 'hidden opacity-0'
       }  absolute top-full left-0 mt-2 flex h-fit flex-col overflow-hidden  rounded-xl p-0 text-white outline-2  outline-slate-700`}
     >
       {children?.map((child: ReactElement) => {
