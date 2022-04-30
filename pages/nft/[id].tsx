@@ -19,6 +19,8 @@ import Backdrop from '@mui/material/Backdrop'
 import ConnectWalletButton from '../../components/ConnectWalletButton'
 import AddressButton from '../../components/AddressButton'
 import { NFTMetadataOwner } from '@thirdweb-dev/sdk'
+import DashboardButton from '../../components/DashboardButton'
+import MyButton from '../../components/MyButton'
 
 interface Props {
   collection: Collection
@@ -68,6 +70,12 @@ const NFTDropPage = ({ collection }: Props) => {
     // confetti.render()
   }, [NFTDrop])
 
+  useEffect(() => {
+    if (minted === false) {
+      setMintedNFT(false)
+    }
+  }, [minted])
+
   const MintNFT = () => {
     if (!NFTDrop || !address) {
       return
@@ -106,6 +114,7 @@ const NFTDropPage = ({ collection }: Props) => {
 
         // console.log(claimedToken?.toString())
 
+        // fetch data of the claimedNFT/just now minted
         claimedNFT
           .then((nft) => {
             setMintedNFT(nft)
@@ -175,18 +184,34 @@ const NFTDropPage = ({ collection }: Props) => {
         className="spce-y-5 flex flex-col"
       >
         <>
-          {Object.keys(mintedNFT).length > 0 && (
-            <>
+          {Object.keys(mintedNFT).length > 0 && mintedNFT ? (
+            <div className=" w-60 lg:w-80">
               <RevealCard
-                className="h-auto w-80"
+                className="h-auto w-full"
                 collectionAddress={collection.address}
                 claimedNFT={mintedNFT as NFTMetadataOwner}
                 priceInETH={priceInETH}
               />
-              <button className="rounded-xl bg-blue-500 px-5 py-2 text-sm hover:bg-blue-600">
-                Close
-              </button>
-            </>
+              <div className="flex w-full items-center justify-between space-x-3 ">
+                <MyButton
+                  text={'close'}
+                  onClick={() => {
+                    setMinted(false)
+                    setMintedNFT({})
+                  }}
+                />
+                <DashboardButton
+                  onClick={() => {
+                    setMinted(false)
+                    setMintedNFT({})
+                  }}
+                />
+              </div>
+            </div>
+          ) : (
+            <h1 className="animate-pulse text-xl font-bold text-green-500">
+              Loading You NFT...
+            </h1>
           )}
         </>
       </Backdrop>
