@@ -9,6 +9,7 @@ import { Collection } from '../typings'
 import { Icon } from '@iconify/react'
 import ConnectWalletButton from '../components/ConnectWalletButton'
 import AddressButton from '../components/AddressButton'
+import DashboardButton from '../components/DashboardButton'
 
 interface Props {
   collections: Collection[]
@@ -55,12 +56,7 @@ const Home = ({ collections }: Props) => {
               // >
 
               // </button>
-              <Link href={`/dashboard/[address]`} as={'/dashboard/' + address}>
-                <button className="text-bold mt-3 flex items-center justify-center space-x-2 rounded-full bg-blue-500 px-5 py-2 text-center text-white transition-all duration-100 hover:outline hover:outline-4 hover:outline-blue-900 active:bg-blue-900">
-                  <span>Dashboard</span>
-                  <Icon icon="ic:baseline-dashboard" />
-                </button>
-              </Link>
+              <DashboardButton className="mt-3" />
             ) : (
               <ConnectWalletButton />
             )}
